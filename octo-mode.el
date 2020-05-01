@@ -7,12 +7,12 @@
 (defconst octo-highlights
   '(("--.*$" . font-lock-comment-face)
     ("'[\\]?.'" . font-lock-string-face)
-    (" where[ $\n]\\|type\\| float\\| char[ $\n]\\|case\\|of[ $\n]\\|open \\|when \\| option"
+    (" where[ $\n]\\|type\\| float\\| char[ $\n]\\|case\\|of[ $\n]\\|open \\|when \\|as"
      . font-lock-keyword-face)
-    ("map \\|error \\|and \\|or" . font-lock-function-name-face)
+    ("map \\|error \\|and \\|or\\|xor\\|if" . font-lock-function-name-face)
     ("\\([a-zA-Z_']*\\)\\([a-zA-Z_', ]*\\)[ \n]*=" . (2 font-lock-variable-name-face))
     ("[A-Z][a-zA-Z_']*". font-lock-constant-face)
-    ("[0-9]*\\|@\\|::" . font-lock-constant-face)
+    ("[\+-]?[0-9\.]*" . font-lock-constant-face)
     ("type \\([a-zA-Z_']*\\)". (1 font-lock-function-name-face))
     ("\\([a-zA-Z_']*\\).*=" . (1 font-lock-function-name-face))))
 
@@ -42,7 +42,7 @@
                  (setq b (point)) ; Get the indentation level of the previous line.
                  (skip-chars-forward " ")
                  (setq e (point))
-                 (if (looking-at ".*where[ ]*$\\|.*case.*of[ ]*$\\|.*->[ ]*$")
+                 (if (looking-at ".*where[ ]*$\\|.*case.*of[ ]*$\\|.*->[ ]*$\\|=$")
                      (setq curindent (+ (- e b) 2))
                    (progn
                      (if (looking-at ".*->.*") ; Set the indentation according to the last line
