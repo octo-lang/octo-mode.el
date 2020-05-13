@@ -7,14 +7,14 @@
 (defconst octo-highlights
   '(("--.*$" . font-lock-comment-face)
     ("'[\\]?.'" . font-lock-string-face)
-    ("\\([a-zA-Z_']*\\)\\([a-zA-Z_', ]*\\)[ \n]*=" . (2 font-lock-variable-name-face))
     ("[A-Z][a-zA-Z_']*". font-lock-constant-face)
-    (" [\+-]?[0-9\.]+" . font-lock-constant-face)
+    ("[^A-Za-z]\\([\+-]?[0-9\.]+\\)" . (1 font-lock-constant-face))
     ("type \\([a-zA-Z_']*\\)". (1 font-lock-function-name-face))
-    ("\\([a-zA-Z_']*\\).*=" . (1 font-lock-function-name-face))
-    (" where[ $\n]\\|type\\| float\\| char[ $\n]\\|case\\|of[ $\n]\\|open \\|when \\|as"
+    ("\\([a-zA-Z_'0-9]*\\).*=" . (1 font-lock-function-name-face))
+    (" where[ $\n]\\|$?type \\| float\\| char[ $\n]\\|[ ]*case\\|of[ $\n]\\|$open \\|when \\| as "
      . font-lock-keyword-face)
-    ("map \\|error \\|and \\|or\\|xor\\|if" . font-lock-function-name-face)))
+    ("\\([a-zA-Z_'0-9]*\\)\\([a-zA-Z_', 0-9]*\\)[ \n]*=" . (2 font-lock-variable-name-face))
+    (" map \\| error \\|and \\|[ $]or \\|xor\\| if " . font-lock-function-name-face)))
 
 (defun indent-line ()
   "Indent current line as octo code."
@@ -42,7 +42,7 @@
                  (setq b (point)) ; Get the indentation level of the previous line.
                  (skip-chars-forward " ")
                  (setq e (point))
-                 (if (looking-at ".*where[ ]*$\\|.*case.*of[ ]*$\\|.*->[ ]*$\\|=$")
+                 (if (looking-at ".*where[ ]*$\\|.*case.*of[ ]*$\\|.*->[ ]*$\\|.*=$")
                      (setq curindent (+ (- e b) 2))
                    (progn
                      (if (looking-at ".*->.*") ; Set the indentation according to the last line
